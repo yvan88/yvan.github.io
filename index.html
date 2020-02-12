@@ -1,139 +1,235 @@
-
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Yvan</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-        <link rel="icon" href="./favicon.png" type="image/x-icon">
-        <link rel="apple-touch-icon" href="./apple-touch-icon.png">
-        <link href='http://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700' rel='stylesheet' type='text/css'>
-        <style>
-            html, body {
-                overflow: hidden;
-                margin: 0;
-            }
-            body {
-                font-family: 'Open Sans', 'Helvetica Neue', 'Hiragino Sans GB', 'LiHei Pro', Arial, sans-serif;
-                color: #333;
-            }
-            #wrapper {
-                position: absolute;
-                left: 0;
-                width: 320px;
-                text-align: center;
-                top: 50%;
-                left: 50%;
-                margin-left: -160px;
-                margin-top: -160px;
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                user-select: none;
-            }
-            h1 {
-                font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
-                font-weight: 700;
-                font-size: 30px;
-                letter-spacing: 9px;
-                text-transform: uppercase;
-                margin: 12px 0;
-                left: 4px;
-            }
-            h2 {
-                color: #999;
-                font-weight: normal;
-                font-size: 15px;
-                letter-spacing: .12em;
-                margin-bottom: 30px;
-                left: 3px;
-            }
-            h1, h2 {
-                position: relative;
-            }
-            p {
-                font-size: 14px;
-                line-height: 2em;
-                margin: 0;
-                letter-spacing: 2px;
-            }
-            canvas {
-                position: absolute;
-                top: 0;
-                left: 0;
-                z-index: 0;
-                width: 100%;
-                height: 100%;
-                pointer-events: none;
-            }
-            a {
-                color: #999;
-                text-decoration: none;
-                transition: color .2s ease;
-            }
-            a:hover {
-                color: #FA8072;
-            }
-        </style>
-        <script type="text/javascript">
+<html lang="en">
 
-        </script>
-    </head>
-    <body>
-        <div id="wrapper">
-            <h1>Yvan</h1>
-            <h2>iOS 开发者， 热爱 区块链 & AI</h2>
-            <p><a href="http://blog.yvans.me" target="_blank">Blog</a></p>
-            <p><a href="https://github.com/yvanda" target="_blank">Github</a></p>
-            <p><a href="http://weibo.com/yvandev" target="_blank">微博</a></p>
-            <p><a href="https://www.zhihu.com/people/yvanda/" target="_blank">知乎</a></p>
-        </div>
-        <canvas></canvas>
-        <script>
-            document.addEventListener('touchmove', function (e) {
-                e.preventDefault()
-            })
-            var c = document.getElementsByTagName('canvas')[0],
-                x = c.getContext('2d'),
-                pr = window.devicePixelRatio || 1,
-                w = window.innerWidth,
-                h = window.innerHeight,
-                f = 90,
-                q,
-                m = Math,
-                r = 0,
-                u = m.PI*2,
-                v = m.cos,
-                z = m.random
-            c.width = w*pr
-            c.height = h*pr
-            x.scale(pr, pr)
-            x.globalAlpha = 0.6
-            function i(){
-                x.clearRect(0,0,w,h)
-                q=[{x:0,y:h*.7+f},{x:0,y:h*.7-f}]
-                while(q[1].x<w+f) d(q[0], q[1])
-            }
-            function d(i,j){
-                x.beginPath()
-                x.moveTo(i.x, i.y)
-                x.lineTo(j.x, j.y)
-                var k = j.x + (z()*2-0.25)*f,
-                    n = y(j.y)
-                x.lineTo(k, n)
-                x.closePath()
-                r-=u/-50
-                x.fillStyle = '#'+(v(r)*127+128<<16 | v(r+u/3)*127+128<<8 | v(r+u/3*2)*127+128).toString(16)
-                x.fill()
-                q[0] = q[1]
-                q[1] = {x:k,y:n}
-            }
-            function y(p){
-                var t = p + (z()*2-1.1)*f
-                return (t>h||t<0) ? y(p) : t
-            }
-            document.onclick = i
-            document.ontouchstart = i
-            i()
-        </script>
-    </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>收件地址智能清洗</title>
+  <link rel="icon" type="image/x-icon" href="img/smart.png">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <script src="js/jquery.min.js"></script>
+  <script src="js/pcasCode.js"></script>
+  <script src="js/zipCode.js"></script>
+  <script src="js/address_parse.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <style>
+    body {
+      padding: 0px 40px;
+    }
+
+    #footer {
+            height: 20px;
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+        }
+
+    #value .key {
+      color: #ff5722;
+      display: inline-block;
+      width: 111px;
+      text-align: right;
+    }
+
+    #value .value {
+      color: #366500;
+      padding-left: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- <h1 class="label label-info" style="color: white;">一切为老婆服务 <small style="color: whitesmoke;">Powered by @Yvan.</small></h1> -->
+  <div class="page-header" style="color: darkcyan;">
+    <h2>收件地址智能清洗
+      <!-- <a class="github-button" href="https://github.com/wzc570738205/smartParsePro" data-size="large" -->
+      <!-- data-show-count="true" aria-label="Star wzc570738205/smartParsePro on GitHub">Star</a> -->
+      <!-- <small>支持省市区街道/姓名/电话/邮编/身份证号码(字母大写)</small> -->
+      <h5 class="label label-info">一切为老婆服务 自动填充省市区县缺失内容，格式化地址</h5>
+    </h2>
+  </div>
+
+  <!-- <div class="alert alert-danger" role="alert">地址、姓名、电话、邮编、身份证号码（字母大写）用空格或者特殊字符分开!!（支持以下数据格式）</div> -->
+  <div class="alert alert-info" role="alert"><strong>请在下面输入原始地址</strong>（地址、姓名、电话、邮编、身份证号码（字母大写）用空格或者特殊字符分开!!）</div> 
+  <!-- <ol>
+        <li>广东省珠海市香洲区盘山路28号幸福茶庄,陈景勇，13593464918</li>
+        <li>马云，陕西省西安市雁塔区丈八沟街道高新四路高新大都荟  13593464918</li>
+        <li>陕西省西安市雁塔区丈八沟街道高新四路高新大都荟710061 刘国良 13593464918 211381198512096810</li>
+        <li>西安市雁塔区丈八沟街道高新四路高新大都荟710061 刘国良 13593464918 211381198512096810</li>
+        <li>雁塔区丈八沟街道高新四路高新大都荟710061 刘国良 13593464918 211381198512096810</li>
+        <li>北京市朝阳区姚家园3楼 13593464918 马云</li>
+        <li>河北省石家庄市新华区中华北大街68号鹿城商务中心6号楼1413室 150-3569-6956 马云</li>
+        <li>疆维吾尔自治区乌鲁木齐市沙依巴克区西虹东路463号 150-3569-6956 小红</li>
+        <li>新疆阿克苏温宿县博孜墩柯尔克孜族乡吾斯塘博村一组306号 150-3569-6956 马云</li>
+    </ol> -->
+
+  <!-- <textarea class="form-control" onchange="getAddress()" cols="50" rows="7" id='textarea'
+    placeholder="请粘贴你的地址"> -->
+    <!-- <label for="name">请在下面输入原始地址</label> -->
+    <div class="input-group">
+      <span class="input-group-addon">原始地址</span>
+      <input id="input" type="text" class="form-control" onchange="getAddress()" placeholder="请粘贴你的原始地址">
+  </div>
+  
+  </textarea>
+  <div id="value"></div>
+  <!-- <br />
+  <h4>省市区街道四级联动</h4>
+  <form class="form-inline">
+    <div class="form-group">
+      <label for="exampleInputName2">省/直辖市</label>
+      <select class="form-control" id="province">
+        <option>请选择</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="exampleInputEmail2">市</label>
+      <select class="form-control" id="city">
+        <option>请选择</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="exampleInputEmail2">区/县</label>
+      <select class="form-control" id="county">
+        <option>请选择</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="exampleInputEmail2">镇/乡/街道</label>
+      <select class="form-control" id="street">
+        <option>请选择</option>
+      </select>
+    </div>
+  </form> -->
+</body>
+<footer id="footer">
+  <p align="center" style="color: gray; font-size: 12px;">一切为老婆服务 Powered by @Yvan.</p>
+</footer>
 </html>
+<script>
+  function getAddress() {
+    let parse_list = smart($('#input').val())
+    // let html = '';
+    // for (let key in parse_list) {
+    //   if (parse_list[key]) {
+    //     console.log(parse_list[key]);
+    //     html += `<p><span class="key">` + key + `</span>:<span class="value">` + parse_list[key] + `</span></p>`
+    //   }
+    // }
+    console.log(parse_list)
+    let html = '<br><div class="alert alert-success" role="alert"><strong>下面是清洗结果</strong>（请自行双击复制粘贴到剪切板，以供后续使用）</div><p><span id="parseresult">' + parse_list.name + ' ' + parse_list.phone + ' ' + parse_list.province + parse_list.city + parse_list.county + parse_list.address + '</span></p>'
+    $('#value').html(html);
+
+    $("#province").val(parse_list.provinceCode);
+    $("#city").val(parse_list.cityCode);
+    $("#county").val(parse_list.countyCode);
+    $("#street").val(parse_list.streetCode);
+
+    getCity($("#province").val(), parse_list)
+    getCounty($("#city").val(), parse_list)
+    getStreet($("#county").val(), parse_list)
+
+  }
+  addressList = pcassCode;
+  addressList.forEach(item => {
+    formatAddresList(item, 1, '')
+  })
+  let province = '';
+  addressList.forEach(res => {
+    province += ` <option value='` + res.code + `'>` + res.name + `</option>`;
+  })
+  $("#province").html(province)
+  getCity($("#province").val())
+  getCounty($("#city").val())
+  getStreet($("#county").val())
+
+  $("#province").change(res => {
+    let provinceCode = $("#province").val();
+    getCity(provinceCode);
+    getCounty($("#city").val())
+    getStreet($("#county").val())
+  })
+
+  $("#city").change(res => {
+    let cityCode = $("#city").val();
+    getCounty(cityCode);
+    getStreet($("#county").val())
+  })
+
+  $("#county").change(res => {
+    let countyCode = $("#county").val();
+    getStreet(countyCode);
+  })
+
+  function getCity(provinceCode, parse_list) {
+    let cityList = [];
+    let city = '';
+    addressList.forEach(res => {
+      if (res.code == provinceCode) {
+        cityList = res.children;
+        return;
+      }
+    })
+    cityList.forEach(res => {
+      city += ` <option value='` + res.code + `'>` + res.name + `</option>`;
+    })
+    $("#city").html(city);
+    if (parse_list) {
+      $("#city").val(parse_list.cityCode);
+    }
+  }
+
+  function getCounty(cityCode, parse_list) {
+    let countyList = [];
+    let county = '';
+    addressList.forEach(el => {
+      el.children.forEach(res => {
+        if (res.code == cityCode) {
+          countyList = res.children;
+          return;
+        }
+      })
+    })
+
+    countyList.forEach(res => {
+      county += ` <option value='` + res.code + `'>` + res.name + `</option>`;
+    })
+    $("#county").html(county)
+    if (parse_list) {
+      $("#county").val(parse_list.countyCode);
+    }
+  }
+
+  function getStreet(countyCode, parse_list) {
+    let streetList = [];
+    let street = '';
+    addressList.forEach(el => {
+      el.children.forEach(element => {
+        element.children.forEach(res => {
+          if (res.code == countyCode) {
+            streetList = res.children;
+            return;
+          }
+        })
+
+      })
+    })
+    streetList.forEach(res => {
+      street += ` <option value='` + res.code + `'>` + res.name + `</option>`;
+    })
+    $("#street").html(street)
+    if (parse_list) {
+      $("#street").val(parse_list.streetCode);
+    }
+  }
+
+  function copyclipboard() {
+    let result = $("#parseresult").text();
+    console.log(result);
+    if (clipboardData.setData("Text", result)) {
+      alert("复制成功!");
+    }
+  }
+</script>
